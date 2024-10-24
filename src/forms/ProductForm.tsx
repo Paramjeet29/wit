@@ -1,5 +1,5 @@
 
-import React, { ChangeEvent, useState, useEffect, useRef } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import { Upload } from 'lucide-react';
 
 interface ProductFormData {
@@ -9,22 +9,26 @@ interface ProductFormData {
   image?: File;
 }
 
+interface ProductCategory {
+  id: string;
+  name: string;
+}
+
 interface ProductFormProps {
   onFormValidChange: (isValid: boolean) => void;
-  categories: string[];
+  categories: ProductCategory[];
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories }) => {
-  const formDataRef = useRef<ProductFormData>({
+  const [formData, setFormData] = useState<ProductFormData>({
     name: '',
-    category: categories[0] || 'Shoes',
+    category: categories[0]?.name || 'Shoes',
     brand: 'Nike',
     image: undefined,
   });
 
   const [formValid, setFormValid] = useState<boolean>(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [, forceUpdate] = useState({});
 
   // Load saved form data when component mounts
   useEffect(() => {
@@ -32,14 +36,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
     const savedImagePreview = localStorage.getItem('productFormImagePreview');
     
     if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      formDataRef.current = {
-        ...formDataRef.current,
-        name: parsedData.name || '',
-        category: parsedData.category || categories[0] || 'Shoes',
-        brand: parsedData.brand || 'Nike'
-      };
-      forceUpdate({}); // Force a re-render to show the loaded data
+      const parsedData = JSON.parse(savedData) as ProductFormData;
+      setFormData(prev => ({
+        ...prev,
+        ...parsedData,
+        category: parsedData.category || categories[0]?.name || 'Shoes',
+      }));
     }
     
     if (savedImagePreview) {
@@ -48,60 +50,52 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
   }, [categories]);
 
   // Save form data to localStorage whenever it changes
-  const saveToLocalStorage = () => {
+  const saveToLocalStorage = (newFormData: ProductFormData) => {
     const dataToSave = {
-      name: formDataRef.current.name,
-      category: formDataRef.current.category,
-      brand: formDataRef.current.brand
+      name: newFormData.name,
+      category: newFormData.category,
+      brand: newFormData.brand,
     };
     localStorage.setItem('productFormData', JSON.stringify(dataToSave));
-    console.log(dataToSave)
-    if (imagePreview) {
-      localStorage.setItem('productFormImagePreview', imagePreview);
-    } else {
-      localStorage.removeItem('productFormImagePreview');
-    }
+    localStorage.setItem('productFormImagePreview', imagePreview || '');
   };
 
   // Validate form fields
   useEffect(() => {
-    const isValid = 
-      formDataRef.current.name.trim() !== '' && 
-      formDataRef.current.brand.trim() !== '';
+    const isValid = formData.name.trim() !== '' && formData.brand.trim() !== '';
     setFormValid(isValid);
     onFormValidChange(isValid);
-  }, [formDataRef.current, onFormValidChange]);
+  }, [formData.name, formData.brand, onFormValidChange]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    formDataRef.current = {
-      ...formDataRef.current,
-      [name]: value
+    const newFormData = {
+      ...formData,
+      [name]: value,
     };
-    saveToLocalStorage();
-    forceUpdate({}); // Force a re-render to show the updated values
+    setFormData(newFormData);
+    saveToLocalStorage(newFormData);
   };
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       const file = files[0];
-      formDataRef.current = {
-        ...formDataRef.current,
+      setFormData(prev => ({
+        ...prev,
         image: file
-      };
-      
+      }));
+
       // Create and save image preview
       const reader = new FileReader();
       reader.onloadend = () => {
         const preview = reader.result as string;
         setImagePreview(preview);
-        saveToLocalStorage();
+        saveToLocalStorage(formData);
       };
       reader.readAsDataURL(file);
     }
   };
-
 
   return (
     <div className="bg-white rounded-lg shadow-sm w-full md:w-1/2">
@@ -117,7 +111,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
               name="name"
               type="text"
               required
-              value={formDataRef.current.name}
+              value={formData.name}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border-gray-300"
             />
@@ -130,12 +124,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
             <select
               id="category"
               name="category"
-              value={formDataRef.current.category}
+              value={formData.category}
               onChange={handleInputChange}
               className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               {categories.map((category) => (
-                <option key={category} value={category}>{category}</option>
+                <option key={category.id} value={category.name}>{category.name}</option>
               ))}
             </select>
           </div>
@@ -149,7 +143,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
               name="brand"
               type="text"
               required
-              value={formDataRef.current.brand}
+              value={formData.brand}
               onChange={handleInputChange}
               className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border-gray-300"
             />
@@ -172,8 +166,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
               <img src={imagePreview} alt="Image Preview" className="w-32 h-32 object-cover rounded" />
             </div>
           )}
-
-         
         </div>
       </div>
     </div>
