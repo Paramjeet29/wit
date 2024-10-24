@@ -1,0 +1,86 @@
+{
+    "products": [
+      {
+        "name": "Nike Air Jordan",
+        "category": "Shoes",
+        "brand": "Nike",
+        "image": "/api/placeholder/80/80",
+        "variants": [
+          {
+            "name": "Size",
+            "values": ["M", "L"]
+          },
+          {
+            "name": "Color",
+            "values": ["Black", "Red"]
+          }
+        ],
+        "combinations": [
+          {
+            "name": "M/Black",
+            "sku": "ABC12",
+            "quantity": 4,
+            "inStock": true
+          },
+          {
+            "name": "L/Red",
+            "sku": "ABC12",
+            "quantity": null,
+            "inStock": true
+          }
+        ],
+        "price": 12000,
+        "discount": {
+          "method": "pct",
+          "value": 12
+        }
+      },
+      {
+        "name": "Nike Air Jordan",
+        "category": "T-shirt",
+        "brand": "Nike",
+        "image": "/api/placeholder/80/80",
+        "variants": [
+          {
+            "name": "Size",
+            "values": ["M", "L"]
+          },
+          {
+            "name": "Color",
+            "values": ["Black", "Red"]
+          }
+        ],
+        "combinations": [
+          {
+            "name": "M/Black",
+            "sku": "ABC12",
+            "quantity": 4,
+            "inStock": true
+          },
+          {
+            "name": "L/Red",
+            "sku": "ABC12",
+            "quantity": null,
+            "inStock": true
+          }
+        ],
+        "price": 12000,
+        "discount": {
+          "method": "pct",
+          "value": 12
+        }
+      }
+
+    ],
+    "categories": [
+      {
+        "id": "abc",
+        "name": "Shoes"
+      },
+      {
+        "id": "xyz",
+        "name": "T-shirt"
+      }
+    ]
+  }
+  
