@@ -68,10 +68,10 @@ const ProductDashboard = () => {
         localStorage.setItem('products', JSON.stringify(parsedProducts));
       }
   
-      console.log('Loaded from localStorage:', {
-        products: parsedProducts,
-        categories: parsedCategories,
-      });
+      // console.log('Loaded from localStorage:', {
+      //   products: parsedProducts,
+      //   categories: parsedCategories,
+      // });
       localStorage.removeItem('productFormData');
       localStorage.removeItem('price');
       localStorage.removeItem('discount');
@@ -93,7 +93,7 @@ const ProductDashboard = () => {
     try {
       localStorage.setItem('products', JSON.stringify(products));
       localStorage.setItem('categories', JSON.stringify(categories));
-      console.log('Saved to localStorage:', { products, categories });
+      // console.log('Saved to localStorage:', { products, categories });
     } catch (error) {
       console.error('Error saving to localStorage:', error);
     }
@@ -153,7 +153,7 @@ const ProductDashboard = () => {
           const response = await fetch('/products.json');
           if (response.ok) {
             const apiData = await response.json();
-            console.log('API data:', apiData);
+            // console.log('API data:', apiData);
 
             // If API request successful, merge with localStorage data
             if (apiData?.products || apiData?.categories) {
@@ -167,10 +167,10 @@ const ProductDashboard = () => {
                 localData.categories
               );
 
-              console.log('Merged data:', {
-                products: mergedProducts,
-                categories: mergedCategories
-              });
+              // console.log('Merged data:', {
+              //   products: mergedProducts,
+              //   categories: mergedCategories
+              // });
 
               setProducts(mergedProducts);
               setCategories(mergedCategories);
@@ -200,8 +200,8 @@ const ProductDashboard = () => {
     };
     
     const updatedCategories = [...categories, newCategory];
-    console.log('Adding new category:', newCategory);
-    console.log('Updated categories:', updatedCategories);
+    // console.log('Adding new category:', newCategory);
+    // console.log('Updated categories:', updatedCategories);
     
     setCategories(updatedCategories);
     saveToLocalStorage(products, updatedCategories);

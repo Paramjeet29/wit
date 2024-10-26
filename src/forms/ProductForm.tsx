@@ -113,7 +113,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
         setImagePreview(cloudinaryUrl); // Set the preview to the newly uploaded URL
         saveToLocalStorage(newFormData);
         
-        console.log("Image uploaded successfully:", cloudinaryUrl);
+        // console.log("Image uploaded successfully:", cloudinaryUrl);
       } catch (error) {
         console.error("Upload failed:", error);
         alert("Failed to upload image. Please try again.");
