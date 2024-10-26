@@ -20,7 +20,7 @@ const MainContent: React.FC<MainContentProps> = ({
     <div className="flex-1 overflow-auto lg:ml-16">
       <div className="p-4 md:p-6 lg:p-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 lg:mb-8">
-          <h1 className="text-xl flex justify-center items-center sm:text-2xl lg:text-3xl font-semibold text-gray-900">
+          <h1 className="text-xl flex justify-center items-center sm:ml-8 lg:ml-0 sm:text-2xl lg:text-3xl font-semibold text-gray-900">
             Products
           </h1>
           

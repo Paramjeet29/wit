@@ -27,7 +27,7 @@ interface MobileMenuButtonProps {
 }
 
 export const MobileMenuButton: React.FC<MobileMenuButtonProps> = ({ isOpen, onClick }) => (
-  <div className="md:hidden fixed left-2 top-5 z-50">
+  <div className="lg:hidden fixed left-2 top-5 z-50">
     <button
       onClick={onClick}
       className="text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -52,7 +52,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose}) => {
   return (
     <div
       className={`
-        fixed inset-y-0 left-0 transform md:relative md:translate-x-0 
+        fixed inset-y-0 left-0 transform lg:relative lg:translate-x-0 
         transition-transform duration-200 ease-in-out bg-white shadow-sm w-64 
         ${isOpen ? 'z-50' : 'z-0'} 
         flex flex-col h-full
