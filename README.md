@@ -43,16 +43,16 @@ To set up the project locally:
    npm install
    npm run dev
 
-##Cloudinary Setup
-To enable image upload to Cloudinary, set up the following environment variables in your .env file:
+## Cloudinary Setup
+-- To enable image upload to Cloudinary, set up the following environment variables in your .env file:
 
-env
-VITE_CLOUDINARY_CLOUD_NAME=
-VITE_CLOUDINARY_UPLOAD_PRESET=
+**env**
+- VITE_CLOUDINARY_CLOUD_NAME=
+- VITE_CLOUDINARY_UPLOAD_PRESET=
 
-##Deployment
---To deploy this project on Vercel:
+## Deployment
+- To deploy this project on Vercel:
 
---Push your code to GitHub or another repository.
---Connect the repository to Vercel.
---Adjust any necessary configurations in vercel.json located in the public folder for Vercel deployment.
+- Push your code to GitHub or another repository.
+- Connect the repository to Vercel.
+- Adjust any necessary configurations in vercel.json located in the public folder for Vercel deployment.
