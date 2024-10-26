@@ -16,67 +16,78 @@ const ProductDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load data from localStorage with format normalization
+
   const loadLocalStorage = () => {
     try {
-      // Load categories
+      // Retrieve categories from localStorage
       const storedCategories = localStorage.getItem('categories');
       const parsedCategories = storedCategories ? JSON.parse(storedCategories) : [];
-
-      // Load all product-related data from localStorage
+  
+      // Load existing products or initialize an empty array
+      const storedProducts = localStorage.getItem('products');
+      const parsedProducts: Product[] = storedProducts ? JSON.parse(storedProducts) : [];
+  
+      // Load formData and other product details if available
       const formData = localStorage.getItem('productFormData');
       const parsedFormData = formData ? JSON.parse(formData) : null;
-      
       const price = localStorage.getItem('price');
       const discount = localStorage.getItem('discount');
-      const imagePreview = localStorage.getItem('productFormImagePreview');
+      // const imagePreview = localStorage.getItem('productFormImagePreview');
       const variants = localStorage.getItem('productVariants');
       const parsedVariants = variants ? JSON.parse(variants) : [];
       const combinations = localStorage.getItem('productCombinations');
       const parsedCombinations = combinations ? JSON.parse(combinations) : [];
-
-      // Only create a product if we have basic form data
-      let localProducts: Product[] = [];
+  
       if (parsedFormData) {
-        const product: Product = {
+        const newProduct: Product = {
           name: parsedFormData.name || '',
           category: parsedFormData.category || '',
           brand: parsedFormData.brand || '',
-          image: imagePreview || '/api/placeholder/80/80',
+          image: parsedFormData.imageUrl ||  'https://res.cloudinary.com/dk322vkjl/image/upload/v1729853766/bun1fmtf4jowqbvkg0mq.png', // Use image URL or placeholder
           variants: parsedVariants.map((variant: any) => ({
             name: variant.name,
-            values: variant.values
+            values: variant.values,
           })),
           combinations: parsedCombinations.map((combo: any) => ({
             name: combo.variant,
             sku: combo.sku,
             quantity: combo.quantity ? Number(combo.quantity) : null,
-            inStock: combo.inStock
+            inStock: combo.inStock,
           })),
           price: price ? Number(price) : 0,
           discount: {
             method: discount ? 'pct' : 'none',
-            value: discount ? Number(discount) : 0
-          }
+            value: discount ? Number(discount) : 0,
+          },
         };
-        localProducts = [product];
+  
+        // Append the new product to the existing products array
+        parsedProducts.push(newProduct);
+  
+        // Save updated products array to localStorage
+        localStorage.setItem('products', JSON.stringify(parsedProducts));
       }
-      
-      console.log('Loaded from localStorage:', { 
-        products: localProducts, 
-        categories: parsedCategories 
+  
+      console.log('Loaded from localStorage:', {
+        products: parsedProducts,
+        categories: parsedCategories,
       });
-      
+      localStorage.removeItem('productFormData');
+      localStorage.removeItem('price');
+      localStorage.removeItem('discount');
+      localStorage.removeItem('productFormImagePreview');
+      localStorage.removeItem('productVariants');
+      localStorage.removeItem('productCombinations');
       return {
-        products: localProducts,
-        categories: parsedCategories
+        products: parsedProducts,
+        categories: parsedCategories,
       };
     } catch (error) {
       console.error('Error loading from localStorage:', error);
       return { products: [], categories: [] };
     }
   };
-
+  
   // Save data to localStorage in the new combined format
   const saveToLocalStorage = (products: Product[], categories: Category[]) => {
     try {

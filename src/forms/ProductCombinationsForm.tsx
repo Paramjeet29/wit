@@ -1,3 +1,4 @@
+
 import { useEffect, useState, useRef } from 'react';
 
 interface Combination {
@@ -14,35 +15,113 @@ interface ProductCombinationsFormProps {
 }
 
 const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFormValidChange }) => {
-  // Get initial combinations from localStorage or use default
+  // Helper function to generate combinations
+  const generateCombinations = (arrays: string[][]) => {
+    return arrays.reduce((acc, curr) => {
+      if (acc.length === 0) return curr.map(item => [item]);
+      const newCombos: string[][] = [];
+      acc.forEach(combo => {
+        curr.forEach(item => {
+          newCombos.push([...combo, item]);
+        });
+      });
+      return newCombos;
+    }, [] as string[][]);
+  };
+
   const getInitialCombinations = () => {
+    // First check for existing combinations
     const savedCombinations = localStorage.getItem('productCombinations');
-    return savedCombinations ? JSON.parse(savedCombinations) : [
-      { id: '1', variant: 'M/Black', sku: 'ABC12', inStock: false, quantity: '' },
-      { id: '2', variant: 'M/Red', sku: 'S0F3', inStock: true, quantity: '5' },
-      { id: '3', variant: 'L/Black', sku: 'HWE2', inStock: false, quantity: '' },
-      { id: '4', variant: 'L/Red', sku: 'ABC12', inStock: true, quantity: '9', error: 'Duplicate SKU' }
-    ];
+    if (savedCombinations) {
+      return JSON.parse(savedCombinations);
+    }
+
+    // If no combinations exist, generate from variants
+    const savedVariants = localStorage.getItem('productVariants');
+    if (savedVariants) {
+      const variants = JSON.parse(savedVariants);
+      const variantArrays = variants
+        .filter((v: { name: any; values: string | any[]; }) => v.name && v.values.length > 0)
+        .map((v: any[]) => v.values);
+
+      if (variantArrays.length > 0) {
+        const combos = generateCombinations(variantArrays);
+        return combos.map((combo, index) => ({
+          id: String(Date.now() + index),
+          variant: combo.join('/'),
+          sku: '',
+          inStock: false,
+          quantity: ''
+        }));
+      }
+    }
+
+    // Fallback to empty state
+    return [{ id: '1', variant: '', sku: '', inStock: false, quantity: '' }];
   };
 
   const [combinations, setCombinations] = useState<Combination[]>(getInitialCombinations());
   const [hasErrors, setHasErrors] = useState<boolean>(true);
-  
-  // Refs for inputs
+  console.log(hasErrors);
   const skuInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const quantityInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const variantInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Save to localStorage whenever combinations change
+  // Watch for variants changes and update combinations
+  useEffect(() => {
+    const handleVariantsChange = () => {
+      const savedVariants = localStorage.getItem('productVariants');
+      if (savedVariants) {
+        const variants = JSON.parse(savedVariants);
+        const variantArrays = variants
+          .filter((v: { name: any; values: string | any[]; }) => v.name && v.values.length > 0)
+          .map((v: any[]) => v.values);
+
+        if (variantArrays.length > 0) {
+          const combos = generateCombinations(variantArrays);
+          
+          // Preserve existing combination data where possible
+          const newCombinations = combos.map(combo => {
+            const variantString = combo.join('/');
+            const existing = combinations.find(c => c.variant === variantString);
+            
+            if (existing) {
+              return existing;
+            }
+
+            return {
+              id: String(Date.now() + Math.random()),
+              variant: variantString,
+              sku: '',
+              inStock: false,
+              quantity: ''
+            };
+          });
+
+          setCombinations(newCombinations);
+        }
+      }
+    };
+
+    // Initial generation
+    handleVariantsChange();
+
+    // Listen for changes to variants in localStorage
+    window.addEventListener('storage', handleVariantsChange);
+    return () => window.removeEventListener('storage', handleVariantsChange);
+  }, []);
+
   useEffect(() => {
     localStorage.setItem('productCombinations', JSON.stringify(combinations));
   }, [combinations]);
 
-  // Update refs array when combinations length changes
   useEffect(() => {
     skuInputRefs.current = skuInputRefs.current.slice(0, combinations.length);
     quantityInputRefs.current = quantityInputRefs.current.slice(0, combinations.length);
+    variantInputRefs.current = variantInputRefs.current.slice(0, combinations.length);
   }, [combinations.length]);
 
+  // Rest of the component remains the same...
   const validateForm = () => {
     const skuCounts = new Map<string, number>();
     const updatedCombinations = combinations.map(combo => {
@@ -54,7 +133,7 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
 
     const hasAnyErrors = updatedCombinations.some(combo => {
       const isDuplicate = skuCounts.get(combo.sku) && skuCounts.get(combo.sku)! > 1;
-      const isEmpty = combo.sku.trim() === '';
+      const isEmpty = combo.sku.trim() === '' || combo.variant.trim() === '';
       return isEmpty || isDuplicate;
     });
 
@@ -91,7 +170,6 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
       prev.map(combo => {
         if (combo.id === id) {
           const newCombo = { ...combo, inStock: !combo.inStock };
-          // Focus quantity input when toggling to in-stock
           if (newCombo.inStock) {
             setTimeout(() => {
               const index = combinations.findIndex(c => c.id === id);
@@ -121,27 +199,37 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
 
   return (
     <div className="bg-white rounded-lg shadow-md p-1 md:p-4 w-full lg:w-1/2">
-      <h2 className="text-lg font-medium mb-4">Combinations</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-medium">Combinations</h2>
+      </div>
       
       <div className="w-full overflow-x-auto">
         <table className="w-full min-w-[300px]">
           <thead>
             <tr className="text-left">
-              <th className="pb-2 text-sm font-medium w-[10px]">Variant</th>
-              <th className="pb-2 text-sm font-medium w-[50px]">
+              <th className="pb-2 text-sm font-medium">
+                Variant <span className="text-red-500">*</span>
+              </th>
+              <th className="pb-2 text-sm font-medium">
                 SKU <span className="text-red-500">*</span>
               </th>
-              <th className="pb-2 text-sm font-medium text-center w-[50px]">In stock</th>
-              <th className="pb-2 text-sm font-medium w-[50px]">Quantity</th>
+              <th className="pb-2 text-sm font-medium text-center">In stock</th>
+              <th className="pb-2 text-sm font-medium">Quantity</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {combinations.map((combo, index) => (
               <tr key={combo.id}>
-                <td className="py-2 pr-0 text-sm text-gray-600">
-                  {combo.variant}
+                <td className="py-2 pr-2">
+                  <input
+                    type="text"
+                    value={combo.variant}
+                    readOnly
+                    className="border rounded p-2 w-full text-sm bg-gray-50"
+                    ref={el => variantInputRefs.current[index] = el}
+                  />
                 </td>
-                <td className="py-2 pr-0">
+                <td className="py-2 pr-2">
                   <div className="space-y-1">
                     <input
                       type="text"
@@ -156,7 +244,7 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
                     )}
                   </div>
                 </td>
-                <td className="py-2 lg:pr-4">
+                <td className="py-2 px-2">
                   <div className="flex justify-center">
                     <button
                       onClick={() => handleToggleChange(combo.id)}
@@ -168,7 +256,7 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
                     </button>
                   </div>
                 </td>
-                <td className="py-2">
+                <td className="py-2 pr-2">
                   <input
                     type="text"
                     value={combo.quantity}

@@ -7,6 +7,7 @@ interface ProductFormData {
   category: string;
   brand: string;
   image?: File;
+  imageUrl?: string;
 }
 
 interface ProductCategory {
@@ -25,16 +26,16 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
     category: categories[0]?.name || 'Shoes',
     brand: 'Nike',
     image: undefined,
+    imageUrl: '',
   });
-
+  
   const [formValid, setFormValid] = useState<boolean>(false);
+  console.log(formValid)
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-  // Load saved form data when component mounts
+  const [uploading, setUploading] = useState<boolean>(false);
+  
   useEffect(() => {
     const savedData = localStorage.getItem('productFormData');
-    const savedImagePreview = localStorage.getItem('productFormImagePreview');
-    
     if (savedData) {
       const parsedData = JSON.parse(savedData) as ProductFormData;
       setFormData(prev => ({
@@ -42,25 +43,16 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
         ...parsedData,
         category: parsedData.category || categories[0]?.name || 'Shoes',
       }));
-    }
-    
-    if (savedImagePreview) {
-      setImagePreview(savedImagePreview);
+      if (parsedData.imageUrl) {
+        setImagePreview(parsedData.imageUrl);
+      }
     }
   }, [categories]);
 
-  // Save form data to localStorage whenever it changes
   const saveToLocalStorage = (newFormData: ProductFormData) => {
-    const dataToSave = {
-      name: newFormData.name,
-      category: newFormData.category,
-      brand: newFormData.brand,
-    };
-    localStorage.setItem('productFormData', JSON.stringify(dataToSave));
-    localStorage.setItem('productFormImagePreview', imagePreview || '');
+    localStorage.setItem('productFormData', JSON.stringify(newFormData));
   };
 
-  // Validate form fields
   useEffect(() => {
     const isValid = formData.name.trim() !== '' && formData.brand.trim() !== '';
     setFormValid(isValid);
@@ -77,26 +69,60 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
     saveToLocalStorage(newFormData);
   };
 
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+  const uploadToCloudinary = async (file: File) => {
+    const url = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/image/upload`;
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET);
+    
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Upload failed: ${response.statusText}. ${errorText}`);
+      }
+      const data = await response.json();
+      return data.secure_url; // Ensure this returns the correct URL
+    } catch (error) {
+      console.error('Upload error:', error);
+      throw error;
+    }
+  };
+  
+  const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       const file = files[0];
-      setFormData(prev => ({
-        ...prev,
-        image: file
-      }));
-
-      // Create and save image preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const preview = reader.result as string;
-        setImagePreview(preview);
-        saveToLocalStorage(formData);
-      };
-      reader.readAsDataURL(file);
+      setUploading(true); // Set uploading to true when starting upload
+      
+      try {
+        // Upload to Cloudinary
+        const cloudinaryUrl = await uploadToCloudinary(file);
+        
+        // Update form data with new image and URL
+        const newFormData = {
+          ...formData,
+          image: file,
+          imageUrl: cloudinaryUrl // This should be the secure URL from Cloudinary
+        };
+        
+        setFormData(newFormData);
+        setImagePreview(cloudinaryUrl); // Set the preview to the newly uploaded URL
+        saveToLocalStorage(newFormData);
+        
+        console.log("Image uploaded successfully:", cloudinaryUrl);
+      } catch (error) {
+        console.error("Upload failed:", error);
+        alert("Failed to upload image. Please try again.");
+      } finally {
+        setUploading(false); // Set uploading to false after upload completes
+      }
     }
   };
-
+  
   return (
     <div className="bg-white rounded-lg shadow-sm w-full md:w-1/2">
       <div className="p-6">
@@ -157,8 +183,14 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
             <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-              <Upload className="w-4 h-4 mr-2" />
-              Upload Image (Optional)
+              {uploading ? (
+                <span>Uploading...</span>
+              ) : (
+                <>
+                  <Upload className="w-4 h-4 mr-2" />
+                  <span>Upload Image (Optional)</span>
+                </>
+              )}
             </button>
           </div>
           {imagePreview && (

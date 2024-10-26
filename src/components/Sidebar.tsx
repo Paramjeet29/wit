@@ -51,15 +51,17 @@ const menuItems: MenuItem[] = [
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose}) => {
   return (
     <div
-      className={`fixed inset-y-0 left-0 transform md:relative md:translate-x-0 
-      transition-transform duration-200 ease-in-out bg-white shadow-sm w-64 z-5z 0 
-      flex flex-col h-full
-      ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      className={`
+        fixed inset-y-0 left-0 transform md:relative md:translate-x-0 
+        transition-transform duration-200 ease-in-out bg-white shadow-sm w-64 
+        ${isOpen ? 'z-50' : 'z-0'} 
+        flex flex-col h-full
+        ${isOpen ? 'translate-x-0 ' : '-translate-x-full'}`}
     >
       {/* Top Section with Logo */}
       <div className="flex justify-between items-center p-6">
         <img
-          src="/api/placeholder/32/32"
+          src="https://res.cloudinary.com/dk322vkjl/image/upload/v1729852144/xhmcwgqnltzt0qfzvlmw.png"
           alt="Logo"
           className="h-8 w-auto"
         />
@@ -99,7 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose}) => {
         <div className="p-4">
           <div className="flex items-center space-x-3 hover:bg-gray-100 p-2 rounded-lg cursor-pointer">
             <img
-              src="/api/placeholder/40/40"
+              src="https://res.cloudinary.com/dk322vkjl/image/upload/v1729852371/nezf59kwhw1sbvk4vf5i.jpg"
               alt="User"
               className="h-10 w-10 rounded-full"
             />

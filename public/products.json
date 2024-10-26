@@ -1,77 +1,114 @@
 {
+  
     "products": [
       {
         "name": "Nike Air Jordan",
         "category": "Shoes",
         "brand": "Nike",
-        "image": "/api/placeholder/80/80",
+        "image": "https://res.cloudinary.com/dk322vkjl/image/upload/v1729851438/vnuuxw6zrmq6lalnoehs.jpg",
         "variants": [
           {
             "name": "Size",
-            "values": ["M", "L"]
+            "values": ["7", "8", "9", "10"]
           },
           {
             "name": "Color",
-            "values": ["Black", "Red"]
+            "values": ["Black", "White", "Red"]
           }
         ],
         "combinations": [
           {
-            "name": "M/Black",
-            "sku": "ABC12",
-            "quantity": 4,
+            "name": "7/Black",
+            "sku": "NJ7B",
+            "quantity": 5,
             "inStock": true
           },
           {
-            "name": "L/Red",
-            "sku": "ABC12",
-            "quantity": null,
-            "inStock": true
+            "name": "9/White",
+            "sku": "NJ9W",
+            "quantity": 3,
+            "inStock": false
           }
         ],
         "price": 12000,
         "discount": {
           "method": "pct",
-          "value": 12
+          "value": 10
         }
       },
       {
-        "name": "Nike Air Jordan",
-        "category": "T-shirt",
-        "brand": "Nike",
-        "image": "/api/placeholder/80/80",
+        "name": "Adidas Ultra Boost",
+        "category": "Shoes",
+        "brand": "Adidas",
+        "image": "https://res.cloudinary.com/dk322vkjl/image/upload/v1729851438/wowsgusjwfblttjfpqlg.jpg",
         "variants": [
           {
             "name": "Size",
-            "values": ["M", "L"]
+            "values": ["6", "7", "8", "9", "10"]
           },
           {
             "name": "Color",
-            "values": ["Black", "Red"]
+            "values": ["Black", "Blue", "Grey"]
+          }
+        ],
+        "combinations": [
+          {
+            "name": "6/Blue",
+            "sku": "AU6B",
+            "quantity": 7,
+            "inStock": true
+          },
+          {
+            "name": "10/Grey",
+            "sku": "AU10G",
+            "quantity": 4,
+            "inStock": true
+          }
+        ],
+        "price": 14000,
+        "discount": {
+          "method": "amt",
+          "value": 500
+        }
+      },
+      {
+        "name": "Puma Classic T-Shirt",
+        "category": "T-shirt",
+        "brand": "Puma",
+        "image": "https://res.cloudinary.com/dk322vkjl/image/upload/v1729851439/nhzfz9tn3gfl6xup8o9y.jpg",
+        "variants": [
+          {
+            "name": "Size",
+            "values": ["S", "M", "L", "XL"]
+          },
+          {
+            "name": "Color",
+            "values": ["Black", "White"]
           }
         ],
         "combinations": [
           {
             "name": "M/Black",
-            "sku": "ABC12",
-            "quantity": 4,
+            "sku": "PCMB",
+            "quantity": 8,
             "inStock": true
           },
           {
-            "name": "L/Red",
-            "sku": "ABC12",
-            "quantity": null,
-            "inStock": true
+            "name": "L/White",
+            "sku": "PCLW",
+            "quantity": 0,
+            "inStock": false
           }
         ],
-        "price": 12000,
+        "price": 1500,
         "discount": {
           "method": "pct",
-          "value": 12
+          "value": 15
         }
       }
-
-    ],
+    ]
+  
+  ,
     "categories": [
       {
         "id": "abc",

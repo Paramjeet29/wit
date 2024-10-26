@@ -73,7 +73,15 @@ const ProductManagement: React.FC = () => {
         <ProductNavbar
           title="Add Product"
           currentStep={currentStep}
-          onBack={() => navigate("/")}
+          onBack={() => {navigate("/") 
+            localStorage.removeItem('productFormData');
+            localStorage.removeItem('price');
+            localStorage.removeItem('discount');
+            localStorage.removeItem('productFormImagePreview');
+            localStorage.removeItem('productVariants');
+            localStorage.removeItem('productCombinations');
+          }
+          }
           onNext={handleNext}
           backLabel="Cancel"
           isNextDisabled={!formValid}

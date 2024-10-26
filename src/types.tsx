@@ -1,17 +1,4 @@
-// // src/types.ts
-// export interface Product {
-//     name: string;
-//     price: number;
-//     brand: string;
-//     image: string;
-//   }
-  
-//   export interface Category {
-//     id: string;
-//     name: string;
-//     products: Product[];
-//   }
-  // types.ts
+
 export interface Product {
     name: string;
     category: string; // Add category property

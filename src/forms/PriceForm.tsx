@@ -21,7 +21,7 @@ const PriceForm: React.FC<PriceFormProps> = ({ onFormValidChange }) => {
     () => (localStorage.getItem('discountType') as '%' | '$') || '%'
   );
   const [isValid, setIsValid] = useState<boolean>(false);
-
+  console.log(isValid);
   // Save to localStorage whenever values change
   useEffect(() => {
     if (price !== '') localStorage.setItem('price', price.toString());
