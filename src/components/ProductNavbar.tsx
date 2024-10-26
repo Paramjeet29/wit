@@ -8,7 +8,7 @@ interface ProductNavbarProps {
   onNext?: () => void;
   backLabel?: string;
   nextLabel?: string;
-  isNextDisabled?: boolean; // Disable Next button when form is invalid
+  isNextDisabled?: boolean; 
 }
 
 const ProductNavbar: React.FC<ProductNavbarProps> = ({
@@ -18,9 +18,9 @@ const ProductNavbar: React.FC<ProductNavbarProps> = ({
   onNext,
   backLabel = 'Back',
   nextLabel = 'Next',
-  isNextDisabled = false // Default value
+  isNextDisabled = false 
 }) => {
-  // Progress steps
+  
   const steps = ['Description', 'Variants', 'Combinations', 'Price Info'];
 
   const renderStepForLargeScreens = (step: string, index: number) => (
@@ -48,7 +48,7 @@ const ProductNavbar: React.FC<ProductNavbarProps> = ({
 
     return (
       <div key={step} className="flex items-center group  relative">
-        {/* Step circle with number */}
+       
         <div
           className={`w-8 h-8 rounded-full flex items-center justify-center
             ${isActive ? 'bg-blue-600 text-white' : 
@@ -59,7 +59,7 @@ const ProductNavbar: React.FC<ProductNavbarProps> = ({
           {isPast ? '✓' : index + 1}
         </div>
 
-        {/* Mobile hover text */}
+        
         <div className="absolute top-10 left-1/2 -translate-x-1/2 transform 
           opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out
           bg-gray-800 text-white text-xs rounded py-1 px-2 whitespace-nowrap z-10">
@@ -68,7 +68,7 @@ const ProductNavbar: React.FC<ProductNavbarProps> = ({
             border-4 border-transparent border-b-gray-800"></div>
         </div>
 
-        {/* Connector line */}
+       
         {index < steps.length - 1 && (
           <div className="w-8 h-px bg-gray-300 mx-2"></div>
         )}

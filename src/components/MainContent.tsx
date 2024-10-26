@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { Product, Category } from '../types';
 
@@ -49,8 +50,8 @@ const MainContent: React.FC<MainContentProps> = ({
           </div>
         </div>
 
-        {/* Responsive Product Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
+        {/* Responsive Category Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
           {categories.map((category) => (
             <div 
               key={category.id}
@@ -68,22 +69,25 @@ const MainContent: React.FC<MainContentProps> = ({
                     .map((product) => (
                       <div
                         key={product.name}
-                        className="group bg-white rounded-lg border border-gray-200 p-3 md:p-4 
-                        hover:shadow-lg transition-all duration-200 hover:border-blue-200"
+                        className="group bg-white rounded-lg border border-gray-200 
+                        hover:shadow-lg transition-all duration-200 hover:border-blue-200 
+                        overflow-hidden"
                       >
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                          {/* Product Image */}
-                          <div className="relative w-full sm:w-20 h-20 sm:h-20 rounded-lg overflow-hidden">
-                            <img
-                              src={product.image}
-                              alt={product.name}
-                              className="absolute inset-0 w-full h-full object-cover 
-                              group-hover:scale-105 transition-transform duration-200"
-                            />
+                        <div className="flex flex-col sm:flex-row gap-4">
+                          {/* Product Image Container */}
+                          <div className="w-full sm:w-32 relative">
+                            <div className="pt-[100%] sm:pt-0 sm:h-32 relative">
+                              <img
+                                src={product.image}
+                                alt={product.name}
+                                className="absolute inset-0 w-full h-full object-cover 
+                                group-hover:scale-105 transition-transform duration-200"
+                              />
+                            </div>
                           </div>
                           
                           {/* Product Details */}
-                          <div className="flex-1 min-w-0">
+                          <div className="flex-1 min-w-0 p-4 sm:py-3 sm:pr-4 sm:pl-0">
                             <h3 className="text-sm font-medium text-gray-900 truncate">
                               {product.name}
                             </h3>
@@ -93,12 +97,13 @@ const MainContent: React.FC<MainContentProps> = ({
                             <p className="mt-1 text-sm text-blue-600 font-medium">
                               {product.brand}
                             </p>
+                           
                           </div>
                         </div>
                       </div>
                     ))
                 ) : (
-                  <div className="rounded-lg p-6 md:p-8 bg-gray-50 text-center">
+                  <div className="rounded-lg p-6 bg-gray-50 text-center">
                     <p className="text-sm text-gray-500">
                       No products available in this category.
                     </p>

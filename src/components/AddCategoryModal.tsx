@@ -15,9 +15,9 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({ isOpen, onClose, on
     e.preventDefault();
     if (!categoryName.trim()) return;
 
-    onSave(categoryName); // Save the category via the parent component's handler
+    onSave(categoryName); 
     setCategoryName('');
-    onClose(); // Close the modal
+    onClose(); 
   };
 
   if (!isOpen) return null;
