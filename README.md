@@ -7,7 +7,6 @@
 - [Usage](#usage)
 - [Cloudinary Setup](#cloudinary-setup)
 - [Deployment](#deployment)
-- [Future Improvements](#future-improvements)
 
 ## Project Overview
 This application provides a system to manage products and their variants, including image uploads to Cloudinary. Each product includes attributes that define its variants and combinations, which are created through structured forms. The data is saved in local storage, allowing persistence across sessions.
