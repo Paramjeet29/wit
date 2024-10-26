@@ -1,50 +1,57 @@
-# React + TypeScript + Vite
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Cloudinary Setup](#cloudinary-setup)
+- [Deployment](#deployment)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
+This application provides a system to manage products and their variants, including image uploads to Cloudinary. Each product includes attributes that define its variants and combinations, which are created through structured forms. The data is saved in local storage, allowing persistence across sessions.
 
-Currently, two official plugins are available:
+## Features
+- **Product Management**: Add, edit, and view products with associated variants.
+- **Variants and Combinations**: Generate combinations based on variant selections.
+- **Image Upload**: Upload product images to Cloudinary.
+- **Local Storage**: Save product and variant data to local storage for seamless use.
+- **Forms for Data Entry**: Utilize forms for product, variant, and combination creation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
+- **React** (Frontend Library)
+- **TypeScript** (Static Typing)
+- **Tailwind CSS** (CSS Framework)
+- **Vite** (Frontend Tooling)
+- **Cloudinary** (Image Hosting and Management)
+- **Vercel** (Deployment Platform)
 
-## Expanding the ESLint configuration
+## Project Structure
+The project follows a component-based structure. The main directories are:
+- **public**: Contains `products.json` and configuration files.
+- **src**: Houses the main application components, pages, and forms for managing products and variants.
+- **types.tsx**: Defines TypeScript interfaces (`Product`, `Variant`, `Combination`, `Category`) used throughout the project.
+- **vercel.json**: Contains Vercel configuration for deployment.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Installation
+To set up the project locally:
+1. Clone the repository:
+   ```bash
+   git clone <repository_url>
+   cd <project_directory>
+   npm install
+   npm run dev
 
-- Configure the top-level `parserOptions` property like this:
+## Cloudinary Setup
+-- To enable image upload to Cloudinary, set up the following environment variables in your .env file:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+**env**
+- VITE_CLOUDINARY_CLOUD_NAME=
+- VITE_CLOUDINARY_UPLOAD_PRESET=
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Deployment
+- To deploy this project on Vercel:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- Push your code to GitHub or another repository.
+- Connect the repository to Vercel.
+- Adjust any necessary configurations in vercel.json located in the public folder for Vercel deployment.
