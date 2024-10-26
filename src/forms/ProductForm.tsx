@@ -1,6 +1,5 @@
-
 import React, { ChangeEvent, useState, useEffect } from 'react';
-import { Upload } from 'lucide-react';
+import { Upload, Check } from 'lucide-react';
 
 interface ProductFormData {
   name: string;
@@ -30,9 +29,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
   });
   
   const [formValid, setFormValid] = useState<boolean>(false);
-  console.log(formValid)
+  console.log(formValid);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [isUploaded, setIsUploaded] = useState<boolean>(false);
   
   useEffect(() => {
     const savedData = localStorage.getItem('productFormData');
@@ -45,6 +46,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
       }));
       if (parsedData.imageUrl) {
         setImagePreview(parsedData.imageUrl);
+        setIsUploaded(true);
       }
     }
   }, [categories]);
@@ -85,7 +87,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
         throw new Error(`Upload failed: ${response.statusText}. ${errorText}`);
       }
       const data = await response.json();
-      return data.secure_url; // Ensure this returns the correct URL
+      return data.secure_url;
     } catch (error) {
       console.error('Upload error:', error);
       throw error;
@@ -93,32 +95,33 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
   };
   
   const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    if (isUploaded) return; // Prevent new uploads if image is already uploaded
+    
     const files = event.target.files;
     if (files && files.length > 0) {
       const file = files[0];
-      setUploading(true); // Set uploading to true when starting upload
+      setUploading(true);
+      setError(false);
       
       try {
-        // Upload to Cloudinary
         const cloudinaryUrl = await uploadToCloudinary(file);
         
-        // Update form data with new image and URL
         const newFormData = {
           ...formData,
           image: file,
-          imageUrl: cloudinaryUrl // This should be the secure URL from Cloudinary
+          imageUrl: cloudinaryUrl
         };
         
         setFormData(newFormData);
-        setImagePreview(cloudinaryUrl); // Set the preview to the newly uploaded URL
+        setImagePreview(cloudinaryUrl);
+        setIsUploaded(true);
         saveToLocalStorage(newFormData);
         
-        // console.log("Image uploaded successfully:", cloudinaryUrl);
       } catch (error) {
         console.error("Upload failed:", error);
-        alert("Failed to upload image. Please try again.");
+        setError(true);
       } finally {
-        setUploading(false); // Set uploading to false after upload completes
+        setUploading(false);
       }
     }
   };
@@ -180,11 +183,29 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
               type="file"
               accept="image/*"
               onChange={handleImageUpload}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              disabled={isUploaded}
+              className={`absolute inset-0 w-full h-full opacity-0 ${isUploaded ? 'cursor-not-allowed' : 'cursor-pointer'}`}
             />
-            <button className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button 
+              className={`inline-flex items-center px-4 py-2 border rounded-lg text-sm font-medium w-full
+                ${isUploaded 
+                  ? 'bg-green-50 border-green-300 text-green-700 cursor-not-allowed' 
+                  : error 
+                    ? 'text-red-600 border-red-300 hover:bg-red-50 bg-white' 
+                    : 'text-gray-700 border-gray-300 hover:bg-gray-50 bg-white'
+                } 
+                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
+              disabled={isUploaded}
+            >
               {uploading ? (
                 <span>Uploading...</span>
+              ) : isUploaded ? (
+                <>
+                  <Check className="w-4 h-4 mr-2" />
+                  <span>Image Uploaded</span>
+                </>
+              ) : error ? (
+                <span>Failed to upload - Click to retry</span>
               ) : (
                 <>
                   <Upload className="w-4 h-4 mr-2" />
