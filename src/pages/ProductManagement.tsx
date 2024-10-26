@@ -11,6 +11,7 @@ const ProductManagement: React.FC = () => {
   const navigate = useNavigate();
   const [formValid, setFormValid] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  console.log(setCurrentStep);
   const [categories, setCategories] = useState<Category[]>([]); // Update type to Category[]
 
   // Fetch categories on component mount
