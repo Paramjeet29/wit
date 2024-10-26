@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar, { MobileMenuButton } from '../components/Sidebar';
 import ProductNavbar from '../components/ProductNavbar';
-import ProductVariantForm from '../forms/ProductVariantForm'; // Ensure this path is correct
+import ProductVariantForm from '../forms/ProductVariantForm';
 
 const ProductVariantPage: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -38,7 +38,7 @@ const ProductVariantPage: React.FC = () => {
         />
         <ProductVariantForm 
           initialVariants={[{ name: 'Size', values: ['M'] }]}
-          onFormValidChange={handleFormValidChange} // Pass the function as a prop
+          onFormValidChange={handleFormValidChange} 
         />
       </div>
     </div>

@@ -6,11 +6,11 @@ interface PriceFormProps {
 }
 
 const PriceForm: React.FC<PriceFormProps> = ({ onFormValidChange }) => {
-  // Refs for input elements
+
   const priceInputRef = useRef<HTMLInputElement>(null);
   const discountInputRef = useRef<HTMLInputElement>(null);
 
-  // Initialize state with localStorage values if they exist
+  
   const [price, setPrice] = useState<number | ''>(
     () => Number(localStorage.getItem('price')) || ''
   );
@@ -22,21 +22,19 @@ const PriceForm: React.FC<PriceFormProps> = ({ onFormValidChange }) => {
   );
   const [isValid, setIsValid] = useState<boolean>(false);
   console.log(isValid);
-  // Save to localStorage whenever values change
+
   useEffect(() => {
     if (price !== '') localStorage.setItem('price', price.toString());
     if (discount !== '') localStorage.setItem('discount', discount.toString());
     localStorage.setItem('discountType', discountType);
   }, [price, discount, discountType]);
 
-  // Validate the form fields
   useEffect(() => {
     const valid = price !== '' && price > 0;
     setIsValid(valid);
     onFormValidChange(valid);
   }, [price, onFormValidChange]);
 
-  // Handle price change with input validation
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     if (value >= 0 || e.target.value === '') {
@@ -44,7 +42,7 @@ const PriceForm: React.FC<PriceFormProps> = ({ onFormValidChange }) => {
     }
   };
 
-  // Handle discount change with input validation
+ 
   const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     if (value >= 0 || e.target.value === '') {
@@ -52,10 +50,10 @@ const PriceForm: React.FC<PriceFormProps> = ({ onFormValidChange }) => {
     }
   };
 
-  // Handle discount type change
+  
   const handleDiscountTypeChange = (type: '%' | '$') => {
     setDiscountType(type);
-    // Focus back on discount input after changing type
+    
     if (discountInputRef.current) {
       discountInputRef.current.focus();
     }

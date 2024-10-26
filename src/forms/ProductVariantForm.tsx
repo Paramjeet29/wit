@@ -17,7 +17,6 @@ interface ProductVariantFormProps {
 export const ProductVariantForm: React.FC<ProductVariantFormProps> = ({
   initialVariants = [{ name: '', values: [] }]
 }) => {
-  // Get initial variants from localStorage or use provided initialVariants
   const getInitialVariants = () => {
     const savedVariants = localStorage.getItem('productVariants');
     return savedVariants ? JSON.parse(savedVariants) : initialVariants;
@@ -27,16 +26,13 @@ export const ProductVariantForm: React.FC<ProductVariantFormProps> = ({
   const [currentInput, setCurrentInput] = useState('');
   const [activeInput, setActiveInput] = useState<number | null>(null);
   
-  // Add refs for inputs
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const valueInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Save to localStorage whenever variants change
   useEffect(() => {
     localStorage.setItem('productVariants', JSON.stringify(variants));
   }, [variants]);
 
-  // Update refs array when variants length changes
   useEffect(() => {
     inputRefs.current = inputRefs.current.slice(0, variants.length);
     valueInputRefs.current = valueInputRefs.current.slice(0, variants.length);
@@ -51,7 +47,6 @@ export const ProductVariantForm: React.FC<ProductVariantFormProps> = ({
   const handleAddOption = (): void => {
     setVariants(prev => {
       const newVariants = [...prev, { name: '', values: [] }];
-      // Focus the name input of the newly added variant
       setTimeout(() => {
         const lastIndex = newVariants.length - 1;
         inputRefs.current[lastIndex]?.focus();

@@ -19,20 +19,20 @@ const ProductDashboard = () => {
 
   const loadLocalStorage = () => {
     try {
-      // Retrieve categories from localStorage
+      
       const storedCategories = localStorage.getItem('categories');
       const parsedCategories = storedCategories ? JSON.parse(storedCategories) : [];
   
-      // Load existing products or initialize an empty array
+      
       const storedProducts = localStorage.getItem('products');
       const parsedProducts: Product[] = storedProducts ? JSON.parse(storedProducts) : [];
   
-      // Load formData and other product details if available
+      
       const formData = localStorage.getItem('productFormData');
       const parsedFormData = formData ? JSON.parse(formData) : null;
       const price = localStorage.getItem('price');
       const discount = localStorage.getItem('discount');
-      // const imagePreview = localStorage.getItem('productFormImagePreview');
+      
       const variants = localStorage.getItem('productVariants');
       const parsedVariants = variants ? JSON.parse(variants) : [];
       const combinations = localStorage.getItem('productCombinations');
@@ -61,10 +61,10 @@ const ProductDashboard = () => {
           },
         };
   
-        // Append the new product to the existing products array
+        
         parsedProducts.push(newProduct);
   
-        // Save updated products array to localStorage
+        
         localStorage.setItem('products', JSON.stringify(parsedProducts));
       }
   
@@ -88,7 +88,7 @@ const ProductDashboard = () => {
     }
   };
   
-  // Save data to localStorage in the new combined format
+  
   const saveToLocalStorage = (products: Product[], categories: Category[]) => {
     try {
       localStorage.setItem('products', JSON.stringify(products));
@@ -99,7 +99,7 @@ const ProductDashboard = () => {
     }
   };
 
-  // Merge products without duplicates
+  
   const mergeProducts = (apiProducts: Product[], localProducts: Product[]): Product[] => {
     const allProducts = [...apiProducts];
     
@@ -118,7 +118,7 @@ const ProductDashboard = () => {
     return allProducts;
   };
 
-  // Merge categories without duplicates
+  
   const mergeCategories = (apiCategories: Category[], localCategories: Category[]): Category[] => {
     const allCategories = [...apiCategories];
     
@@ -141,21 +141,18 @@ const ProductDashboard = () => {
       try {
         setLoading(true);
         
-        // First load from localStorage
+       
         const localData = loadLocalStorage();
         
-        // Set initial data from localStorage
         setProducts(localData.products);
         setCategories(localData.categories);
         
-        // Then try to fetch from API
         try {
           const response = await fetch('/products.json');
           if (response.ok) {
             const apiData = await response.json();
             // console.log('API data:', apiData);
 
-            // If API request successful, merge with localStorage data
             if (apiData?.products || apiData?.categories) {
               const mergedProducts = mergeProducts(
                 apiData.products || [],

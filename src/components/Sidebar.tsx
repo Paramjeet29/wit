@@ -58,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose}) => {
         flex flex-col h-full
         ${isOpen ? 'translate-x-0 ' : '-translate-x-full'}`}
     >
-      {/* Top Section with Logo */}
+      
       <div className="flex justify-between items-center p-6">
         <img
           src="https://res.cloudinary.com/dk322vkjl/image/upload/v1729852144/xhmcwgqnltzt0qfzvlmw.png"
@@ -76,7 +76,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose}) => {
         )}
       </div>
 
-      {/* Navigation Menu - with flex-1 to push profile to bottom */}
       <div className="flex-1 overflow-y-auto">
         <nav className="px-3 space-y-1">
           {menuItems.map((item) => (
@@ -96,7 +95,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose}) => {
         </nav>
       </div>
 
-      {/* User Profile - Now fixed at bottom */}
       <div className=" border-t">
         <div className="p-4">
           <div className="flex items-center space-x-3 hover:bg-gray-100 p-2 rounded-lg cursor-pointer">

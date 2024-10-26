@@ -19,13 +19,12 @@ const MainContent: React.FC<MainContentProps> = ({
   return (
     <div className="flex-1 overflow-auto lg:ml-16">
       <div className="p-4 md:p-6 lg:p-8">
-        {/* Responsive Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 lg:mb-8">
           <h1 className="text-xl flex justify-center items-center sm:text-2xl lg:text-3xl font-semibold text-gray-900">
             Products
           </h1>
           
-          {/* Action Buttons */}
+          
           <div className="flex flex-wrap gap-3">
             <button
               onClick={onAddCategory}
@@ -50,7 +49,7 @@ const MainContent: React.FC<MainContentProps> = ({
           </div>
         </div>
 
-        {/* Responsive Category Grid */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
           {categories.map((category) => (
             <div 
@@ -74,7 +73,7 @@ const MainContent: React.FC<MainContentProps> = ({
                         overflow-hidden"
                       >
                         <div className="flex flex-col sm:flex-row gap-4">
-                          {/* Product Image Container */}
+                         
                           <div className="w-full sm:w-32 relative">
                             <div className="pt-[100%] sm:pt-0 sm:h-32 relative">
                               <img
@@ -86,7 +85,7 @@ const MainContent: React.FC<MainContentProps> = ({
                             </div>
                           </div>
                           
-                          {/* Product Details */}
+                          
                           <div className="flex-1 min-w-0 p-4 sm:py-3 sm:pr-4 sm:pl-0">
                             <h3 className="text-sm font-medium text-gray-900 truncate">
                               {product.name}

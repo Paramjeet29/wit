@@ -3,22 +3,22 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar, {  MobileMenuButton } from '../components/Sidebar';
 import ProductNavbar from '../components/ProductNavbar';
-import PriceForm from '../forms/PriceForm'; // Ensure this path is correct
+import PriceForm from '../forms/PriceForm'; 
 
 const ProductPrice: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isValid, setIsValid] = useState(true); // Track form validity
+  const [isValid, setIsValid] = useState(true); 
   const navigate = useNavigate();
 
 
-  // Handle form validity change
+  
   const handleFormValidChange = (valid: boolean) => {
     setIsValid(valid);
   };
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Mobile Menu Button */}
+     
       <MobileMenuButton 
         isOpen={isSidebarOpen} 
         onClick={() => setIsSidebarOpen(!isSidebarOpen)} 
@@ -38,13 +38,13 @@ const ProductPrice: React.FC = () => {
           onBack={() => navigate("/combinations")}
           onNext={() => {
             if (isValid) {
-              navigate("/"); // Navigate only if form is valid
+              navigate("/"); 
             }
           }}
           backLabel="Back"
           nextLabel="Confirm"
         />
-        {/* Pass the validity change handler to the PriceForm */}
+        
         <PriceForm onFormValidChange={handleFormValidChange} />
       </div>
     </div>

@@ -8,17 +8,17 @@ import ProductCombinationsForm from '../forms/ProductCombinationsForm';
 const ProductCombination: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
-  const [formValid, setFormValid] = useState(false); // Track form validation state
+  const [formValid, setFormValid] = useState(false); 
 
 
   const handleNext = () => {
     if (formValid) {
-      navigate('/price'); // Navigate to the price page only if the form is valid
+      navigate('/price'); 
     }
   };
 
   const handleFormValidChange = (isValid: boolean) => {
-    setFormValid(isValid); // Update the form validation state based on input
+    setFormValid(isValid); 
   };
 
   return (
@@ -40,13 +40,13 @@ const ProductCombination: React.FC = () => {
         <ProductNavbar
           title="Add Product"
           currentStep={2}
-          onBack={() => navigate("/variant")} // Navigate to the previous step
-          onNext={handleNext} // Handle next with validation
+          onBack={() => navigate("/variant")} 
+          onNext={handleNext}
           backLabel="Back"
-          isNextDisabled={!formValid} // Disable next if form is invalid
+          isNextDisabled={!formValid}
         />
         
-        <ProductCombinationsForm onFormValidChange={handleFormValidChange} /> {/* Pass validation handler */}
+        <ProductCombinationsForm onFormValidChange={handleFormValidChange} />
         
       </div>
     </div>

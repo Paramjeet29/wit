@@ -56,7 +56,6 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
       }
     }
 
-    // Fallback to empty state
     return [{ id: '1', variant: '', sku: '', inStock: false, quantity: '' }];
   };
 
@@ -67,7 +66,6 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
   const quantityInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const variantInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
-  // Watch for variants changes and update combinations
   useEffect(() => {
     const handleVariantsChange = () => {
       const savedVariants = localStorage.getItem('productVariants');
@@ -80,7 +78,6 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
         if (variantArrays.length > 0) {
           const combos = generateCombinations(variantArrays);
           
-          // Preserve existing combination data where possible
           const newCombinations = combos.map(combo => {
             const variantString = combo.join('/');
             const existing = combinations.find(c => c.variant === variantString);
@@ -103,10 +100,8 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
       }
     };
 
-    // Initial generation
     handleVariantsChange();
 
-    // Listen for changes to variants in localStorage
     window.addEventListener('storage', handleVariantsChange);
     return () => window.removeEventListener('storage', handleVariantsChange);
   }, []);
@@ -121,7 +116,6 @@ const ProductCombinationsForm: React.FC<ProductCombinationsFormProps> = ({ onFor
     variantInputRefs.current = variantInputRefs.current.slice(0, combinations.length);
   }, [combinations.length]);
 
-  // Rest of the component remains the same...
   const validateForm = () => {
     const skuCounts = new Map<string, number>();
     const updatedCombinations = combinations.map(combo => {

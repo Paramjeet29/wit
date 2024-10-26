@@ -95,7 +95,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onFormValidChange, categories
   };
   
   const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-    if (isUploaded) return; // Prevent new uploads if image is already uploaded
+    if (isUploaded) return;
     
     const files = event.target.files;
     if (files && files.length > 0) {
